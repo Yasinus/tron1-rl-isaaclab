@@ -50,6 +50,7 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper
 # Import extensions to set up environment tasks
 import bipedal_locomotion  # noqa: F401
 from bipedal_locomotion.utils.wrappers.rsl_rl import RslRlPpoAlgorithmMlpCfg, export_mlp_as_onnx, export_policy_as_jit
+from bipedal_locomotion.utils.wrappers.rsl_rl import LimxRslRlVecEnvWrapper
 
 
 def main():
@@ -91,7 +92,7 @@ def main():
         env = multi_agent_to_single_agent(env)
 
     # wrap around environment for rsl-rl
-    env = RslRlVecEnvWrapper(env)
+    env = LimxRslRlVecEnvWrapper(env)
     # load previously trained model
     print(f"[INFO]: Loading model checkpoint from: {resume_path}")
     ppo_runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)

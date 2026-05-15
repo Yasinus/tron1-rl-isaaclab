@@ -89,3 +89,36 @@ gym.register(
         "rsl_rl_cfg_entry_point": limx_sf_blind_flat_runner_cfg,
     },
 )
+
+############################
+# Tron1 Named Environments
+############################
+gym.register(
+    id="Isaac-PF-Tron1-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": limx_pointfoot_env_cfg.PFBlindFlatEnvCfg,
+        "rsl_rl_cfg_entry_point": limx_pf_blind_flat_runner_cfg,
+    },
+)
+
+gym.register(
+    id="Isaac-WF-Tron1-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": limx_wheelfoot_env_cfg.WFBlindFlatEnvCfg,
+        "rsl_rl_cfg_entry_point": limx_wf_blind_flat_runner_cfg,
+    },
+)
+
+gym.register(
+    id="Isaac-SF-Tron1-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": limx_solefoot_env_cfg.SFBlindFlatEnvCfg,
+        "rsl_rl_cfg_entry_point": limx_sf_blind_flat_runner_cfg,
+    },
+)

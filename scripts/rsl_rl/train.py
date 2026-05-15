@@ -43,6 +43,7 @@ simulation_app = app_launcher.app
 
 import gymnasium as gym
 import os
+import pickle
 import torch
 from datetime import datetime
 
@@ -57,12 +58,10 @@ from isaaclab.envs import (
     multi_agent_to_single_agent,
 )
 from isaaclab.utils.dict import print_dict
-from isaaclab.utils.io import dump_pickle, dump_yaml
+from isaaclab.utils.io import dump_yaml
 from isaaclab_tasks.utils import get_checkpoint_path, parse_env_cfg
-from isaaclab_rl.rsl_rl import RslRlVecEnvWrapper
-
 # Import extensions to set up environment tasks
-from bipedal_locomotion.utils.wrappers.rsl_rl import RslRlPpoAlgorithmMlpCfg
+from bipedal_locomotion.utils.wrappers.rsl_rl import LimxRslRlVecEnvWrapper, RslRlPpoAlgorithmMlpCfg
 
 
 torch.backends.cuda.matmul.allow_tf32 = True
@@ -113,7 +112,7 @@ def main():
         env = multi_agent_to_single_agent(env)
 
     # wrap around environment for rsl-rl
-    env = RslRlVecEnvWrapper(env)
+    env = LimxRslRlVecEnvWrapper(env)
 
     # create runner from rsl-rl
     # on_policy_runner_class = eval(agent_cfg.runner_type)
@@ -141,8 +140,10 @@ def main():
     # dump the configuration into log-directory
     dump_yaml(os.path.join(log_dir, "params", "env.yaml"), env_cfg)
     dump_yaml(os.path.join(log_dir, "params", "agent.yaml"), agent_cfg)
-    dump_pickle(os.path.join(log_dir, "params", "env.pkl"), env_cfg)
-    dump_pickle(os.path.join(log_dir, "params", "agent.pkl"), agent_cfg)
+    with open(os.path.join(log_dir, "params", "env.pkl"), "wb") as f:
+        pickle.dump(env_cfg, f)
+    with open(os.path.join(log_dir, "params", "agent.pkl"), "wb") as f:
+        pickle.dump(agent_cfg, f)
 
     # run training
     runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)

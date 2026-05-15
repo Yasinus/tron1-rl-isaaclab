@@ -1,2 +1,2 @@
-from .config import *
-from .usd import *
+"""Assets package for bipedal locomotion robots."""
+
